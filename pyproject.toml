@@ -2,6 +2,25 @@
 requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
+[project]
+dynamic = ["version"]
+name = "h-testkit"
+description = "A collection of pytest fixtures and other shared code for use in Python tests."
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Developers",
+]
+requires-python = ">=3.9"
+dependencies = [
+]
+
+[project.urls]
+Repository = "https://github.com/hypothesis/h-testkit"
+Issues = "https://github.com/hypothesis/h-testkit/issues"
+Changelog = "https://github.com/hypothesis/h-testkit/releases"
+
 [tool.setuptools_scm]
 
 [tool.pytest.ini_options]
@@ -14,6 +33,7 @@ filterwarnings = [
     "ignore:^pkg_resources is deprecated as an API:DeprecationWarning:pyramid",
     "ignore:^Deprecated call to .pkg_resources\\.declare_namespace\\('.*'\\).\\.:DeprecationWarning:pkg_resources",
     "ignore:^'cgi' is deprecated and slated for removal in Python 3\\.13$:DeprecationWarning:webob",
+    "ignore:^datetime\\.datetime\\.utcnow\\(\\) is deprecated and scheduled for removal in a future version\\.:DeprecationWarning",
 ]
 
 [tool.pydocstyle]
@@ -62,6 +82,10 @@ show_missing = true
 precision = 2
 fail_under = 100.00
 skip_covered = true
+exclude_also = [
+    # `if TYPE_CHECKING:` blocks are only executed while running mypy.
+    "if TYPE_CHECKING:",
+]
 
 [tool.isort]
 multi_line_output = 3
@@ -145,6 +169,9 @@ output-format = "colorized"
 score = "no"
 
 [tool.mypy]
+allow_untyped_globals = true
+error_summary = false
+pretty = true
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
@@ -155,8 +182,8 @@ disable_error_code = [
 ]
 
 [[tool.mypy.overrides]]
-module= [
-  # Don't try to typecheck the tests for now
+module = [
+  # Don't try to typecheck the tests for now.
   "tests.*",
 ]
 ignore_errors = true
